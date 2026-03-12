@@ -1,9 +1,9 @@
 ---
 name: esa-images
-description: esa記事から添付画像を一括ダウンロードする。esa の記事番号を指定すると、記事本文中の img.esa.io 画像URLを全て抽出し、プロジェクトルートの .design/esa_{postNumber}/ にダウンロードする。
+description: esa記事から添付画像を一括ダウンロードする。esa の記事番号を指定すると、記事本文中の img.esa.io 画像URLを全て抽出し、ローカルにダウンロードする。第3引数で保存先ディレクトリを指定可能（省略時は .design/esa_{postNumber}/）。
 disable-model-invocation: true
 allowed-tools: Bash, Grep, Read, Write, Edit
-argument-hint: <team_name> <post_number>
+argument-hint: <team_name> <post_number> [output_dir]
 ---
 
 esa記事の添付画像を一括ダウンロードする。
@@ -12,13 +12,18 @@ esa記事の添付画像を一括ダウンロードする。
 
 - `$0` — esa チーム名（例: kaigionrails）
 - `$1` — 記事番号（例: 826）
+- `$2` — （省略可）保存先ディレクトリ。省略時は `.design/esa_$1/`
 
 ## 手順
 
 1. esa MCP ツール `mcp__esa__esa_get_post` で teamName=$0, postNumber=$1 の記事を取得する
 2. 記事本文（body_md）から `https://img.esa.io/uploads/` で始まる画像URLを全て抽出する
-3. プロジェクトルートに `.design/esa_$1/` ディレクトリを作成する
-4. `.gitignore` に `.design/` が含まれていなければ追加する
+3. 保存先ディレクトリを決定する
+   - `$2` が指定されている場合はそのディレクトリを使用する
+   - 省略時はプロジェクトルートに `.design/esa_$1/` を作成する
+4. `.gitignore` の処理（保存先が `.design/` 配下の場合のみ）
+   - `.gitignore` に `.design/` が含まれていなければ追加する
+   - 保存先が `.design/` 配下でない場合はスキップする
 5. 各画像を curl でダウンロードする。ファイル名は連番 + 内容がわかる名前をつける（例: `01_top_page.png`）
    - Markdown中の alt テキストやコンテキストからファイル名を推測する
    - alt テキストがない場合は `01_image.png` のような連番にする
