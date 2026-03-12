@@ -13,7 +13,7 @@ Claude Code は `img.esa.io` の画像URLを直接閲覧できません。
 ## Requirements
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
-- [esa MCP server](https://github.com/because-and/esa-mcp-server) が設定済みであること
+- [esa MCP server](https://github.com/esaio/esa-mcp-server) が設定済みであること
 
 ## Install
 
